@@ -12,11 +12,14 @@ class Request extends http.IncomingMessage {
 
         let match = url.pathname.match(/\/minecraft(.*)/);
         this.url = match ? match[1] : null;
-        if (this.url == "/") {
-            this.url = "/index.html";
-        }
 
         this.params = url.searchParams;
+    }
+
+    parseData() {
+        if (this.headers["content-type"] && this.headers["content-type"] == "application/json") {
+            this.parseJSONData();
+        }
     }
 
     parseJSONData() {

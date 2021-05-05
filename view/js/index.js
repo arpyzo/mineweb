@@ -1,20 +1,13 @@
 $(document).ready(function() {
-    ajaxRequest({
-        type: 'GET',
-        url: "api/list",
-        success: appendServers
-    });
+    const owner = window.location.pathname.split("/")[2];
+    if (owner) {
+        ajaxRequest({
+            type: 'GET',
+            url: "api/list?owner=" + owner,
+            success: appendServers
+        });
+    }
 });
-
-/*function ajaxJSONRequest(type, url, data, success) {
-    ajaxRequest({
-        type: type,
-        url: url,
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        success: success
-    });
-}*/
 
 function appendServers(servers) {
     success: $("#servers-div").append(servers);

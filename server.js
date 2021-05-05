@@ -13,6 +13,12 @@ function start(port) {
         });
         request.addListener("end", function() {
             request.data = Buffer.concat(dataBuffers);
+             try {
+                request.parseData();
+            } catch(error) {
+                return response.return400(error);
+            }
+
             handler.handle(request, response);
         });
     }
