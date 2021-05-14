@@ -1,0 +1,28 @@
+#servers-div {
+  margin: 20px;
+}
+
+.row-item {
+  display: inline-block;
+  margin: 5px 13px;
+}
+
+button {
+  width: 75px;
+  height: 25px;
+}
+
+[id*="server-status-div"] {
+  width: 59px;
+  text-transform: capitalize;
+}
+
+.flashing {
+  animation: flashing 1.5s linear infinite;
+}
+
+@keyframes flashing {
+    0% { opacity: 0; }
+   50% { opacity: 1; }
+  100% { opacity: 0; }
+}

@@ -27,7 +27,15 @@ function handle(request, response) {
         if (!owner) {
             return response.return400("Missing owner parameter");
         }
-        return response.returnText(getServerList(owner).join("<br>\n"));
+        return response.returnJSON(JSON.stringify(getServerList(owner)));
+    }
+
+    if (request.url == "/api/status") {
+        const server = request.params.get("server");
+        if (!server) {
+            return response.return400("Missing server parameter");
+        }
+        return response.returnJSON(JSON.stringify({ "status": getServerStatus(server)}));
     }
 
     if (request.url == "/api/start") {
@@ -52,11 +60,11 @@ function getServerList(owner) {
             const serverMetadata = getServerMetadata(serverDirEntry.name);
             if (serverMetadata) {
                 if (serverMetadata.owner == owner) {
+                    serverMetadata.id = serverDirEntry.name;
                     serverMetadata.status = getServerStatus(serverDirEntry.name);
-                    servers.push(serverDirEntry.name);
+                    servers.push(serverMetadata);
                 }
             }
-            console.log(serverMetadata);
         }
     });
     return servers;
@@ -75,7 +83,7 @@ function getServerStatus(server) {
     try {
         return fs.readFileSync(`${serverDir}/${server}/server_state`, {encoding: 'utf8'});
     } catch(error) {
-        return "stopped";
+        return "unknown";
     }
 }
 
