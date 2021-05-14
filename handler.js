@@ -39,15 +39,19 @@ function handle(request, response) {
     }
 
     if (request.url == "/api/start") {
-        //return response.returnText("");
+        const server = request.params.get("server");
+        if (!server) {
+            return response.return400("Missing server parameter");
+        }
+        return response.returnJSON(JSON.stringify({ "status": serverCommand("start", server)}));
     }
 
     if (request.url == "/api/stop") {
-        //return response.returnText("");
-    }
-
-    if (request.url == "/api/running") {
-        //return response.returnText("");
+        const server = request.params.get("server");
+        if (!server) {
+            return response.return400("Missing server parameter");
+        }
+        return response.returnJSON(JSON.stringify({ "status": serverCommand("stop", server)}));
     }
 
     return response.return404();
@@ -85,6 +89,10 @@ function getServerStatus(server) {
     } catch(error) {
         return "unknown";
     }
+}
+
+function serverCommand(command, server) {
+
 }
 
 exports.handle = handle;

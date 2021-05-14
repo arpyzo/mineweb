@@ -1,5 +1,10 @@
 #servers-div {
-  margin: 20px;
+  margin-top: 40px;
+}
+
+body {
+  display: flex;
+  justify-content: center;
 }
 
 .row-item {
