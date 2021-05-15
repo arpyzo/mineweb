@@ -30,12 +30,12 @@ function handle(request, response) {
         return response.returnJSON(JSON.stringify(getServerList(owner)));
     }
 
-    if (request.url == "/api/status") {
+    if (request.url == "/api/state") {
         const server = request.params.get("server");
         if (!server) {
             return response.return400("Missing server parameter");
         }
-        return response.returnJSON(JSON.stringify({ "status": getServerStatus(server)}));
+        return response.returnJSON(JSON.stringify({"state": getServerState(server)}));
     }
 
     if (request.url == "/api/start") {
@@ -43,7 +43,8 @@ function handle(request, response) {
         if (!server) {
             return response.return400("Missing server parameter");
         }
-        return response.returnJSON(JSON.stringify({ "status": serverCommand("start", server)}));
+        serverCommand("start", server);
+        return response.return200();
     }
 
     if (request.url == "/api/stop") {
@@ -51,7 +52,8 @@ function handle(request, response) {
         if (!server) {
             return response.return400("Missing server parameter");
         }
-        return response.returnJSON(JSON.stringify({ "status": serverCommand("stop", server)}));
+        serverCommand("stop", server);
+        return response.return200();
     }
 
     return response.return404();
@@ -59,13 +61,13 @@ function handle(request, response) {
 
 function getServerList(owner) {
     const servers = [];
-    fs.readdirSync(serverDir, { withFileTypes: true}).forEach(function(serverDirEntry) {
+    fs.readdirSync(serverDir, {withFileTypes: true}).forEach(function(serverDirEntry) {
         if (serverDirEntry.isDirectory()) {
             const serverMetadata = getServerMetadata(serverDirEntry.name);
             if (serverMetadata) {
                 if (serverMetadata.owner == owner) {
                     serverMetadata.id = serverDirEntry.name;
-                    serverMetadata.status = getServerStatus(serverDirEntry.name);
+                    serverMetadata.state = getServerState(serverDirEntry.name);
                     servers.push(serverMetadata);
                 }
             }
@@ -83,7 +85,7 @@ function getServerMetadata(server) {
     }
 }
 
-function getServerStatus(server) {
+function getServerState(server) {
     try {
         return fs.readFileSync(`${serverDir}/${server}/server_state`, {encoding: 'utf8'});
     } catch(error) {

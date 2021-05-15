@@ -1,10 +1,5 @@
 #servers-div {
-  margin-top: 40px;
-}
-
-body {
-  display: flex;
-  justify-content: center;
+  margin: 40px;
 }
 
 .row-item {
@@ -17,7 +12,7 @@ button {
   height: 25px;
 }
 
-[id*="server-status-div"] {
+.server-state-div {
   width: 59px;
   text-transform: capitalize;
 }
