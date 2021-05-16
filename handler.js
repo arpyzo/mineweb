@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { spawn } = require('child_process');
 
 const serverDir = __dirname + "/../servers"
 
@@ -94,7 +95,13 @@ function getServerState(server) {
 }
 
 function serverCommand(command, server) {
+    console.log(`COMMAND: ${command} ${server}`);
 
+    subprocess = spawn('/opt/minecraft/bin/minecraft.sh', [command, server], {
+      detached: true,
+      stdio: 'ignore'
+    });
+    subprocess.unref();
 }
 
 exports.handle = handle;
