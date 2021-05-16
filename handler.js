@@ -95,7 +95,7 @@ function getServerState(server) {
 }
 
 function serverCommand(command, server) {
-    console.log(`COMMAND: ${command} ${server}`);
+    console.log(`Running: ${command} ${server}`);
 
     subprocess = spawn('/opt/minecraft/bin/minecraft.sh', [command, server], {
       detached: true,

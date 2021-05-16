@@ -76,12 +76,16 @@ function trackState(serverId) {
 }
 
 function sendCommand(serverId) {
-    serverCommand = $(`#server-btn-${serverId}`).html().toLowerCase();
+    const serverCommand = $(`#server-btn-${serverId}`).html().toLowerCase();
     if (["start", "stop"].includes(serverCommand)) {
          ajaxRequest({
             type: 'GET',
             url: `api/${serverCommand}?server=${serverId}`,
-            success: alert("DONE")
+            success: function() {
+                const newState = serverCommand == "start" ? "starting" : "stopping";
+                setStateDisplay(serverId, newState)
+                stateInterval = setInterval(function() { trackState(serverId); }, 1000);
+            }
         });
     }
 }
